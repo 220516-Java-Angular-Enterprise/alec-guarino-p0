@@ -7,10 +7,9 @@ import java.util.UUID;
 
 public class Location {
 
-    UUID id;
-    ArrayList<Order> orders;
-
-    Map<UUID, Integer> productStock;
+    private UUID id;
+    private ArrayList<Order> orders;
+    private Map<UUID, Integer> productStock;
 
 
 }

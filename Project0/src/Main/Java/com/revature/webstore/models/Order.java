@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Order {
-    UUID accountID;
-    ArrayList<Product> items;
-    UUID locationID;
-    Date date;
-
+    private UUID accountID;
+    private ArrayList<Product> items;
+    private UUID locationID;
+    private Date date;
 
 }
