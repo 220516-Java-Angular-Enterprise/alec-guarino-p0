@@ -6,8 +6,10 @@ import java.util.UUID;
 public interface CrudDAO<T> {
     void save(T obj);
     void update(T obj);
-    void delete(UUID id);
-    T getByID(UUID id);
+    void delete(String id);
+    T getByID(String id);
     ArrayList<T> getAll();
+
+    boolean getExistsInColumnByString(String column, String input);
 
 }

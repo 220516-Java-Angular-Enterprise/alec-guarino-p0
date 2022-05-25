@@ -30,14 +30,20 @@ st.close();
 public class ProductDAO implements CrudDAO<Product> {
 
     String path = "src/main/resources/database/products.txt";
+    Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(Product obj) {
         try{
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("");
-            System.out.println("");
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("INSERT INTO products (id, name, price, description) VALUES(?,?,?,?)");
+            ps.setString(1, obj.getId() );
+            ps.setString(2, obj.getName() );
+            ps.setInt(3, obj.getPrice() );
+            ps.setString(4, obj.getDescription() );
+
+            ps.executeUpdate();
         } catch (Exception e) {
-            //throw SQLException exc;
+            throw new RuntimeException("An error occurred when tyring to save to the database.");
         }
     }
 
@@ -47,13 +53,38 @@ public class ProductDAO implements CrudDAO<Product> {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(String id) {
 
     }
 
     @Override
-    public Product getByID(UUID id) {
-        return null;
+    public Product getByID(String id) {
+        Product nextP = new Product();
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products WHERE id = " + id);
+            ResultSet rs = ps.executeQuery();
+
+        while (rs.next())  {
+
+            nextP.setId(rs.getString("id"));
+            nextP.setName(rs.getString("name"));
+            nextP.setPrice(rs.getInt("price"));
+            nextP.setDescription(rs.getString("description"));
+
+            System.out.print("Column 1 returned ");
+            System.out.println(rs.getString(1));
+
+
+        }
+        rs.close();
+        ps.close();
+    } catch (SQLException e) {
+        System.out.print("");
+        //throw new RuntimeException("An error occurred when trying to access the file.");
+    }
+
+        return nextP;
     }
 
     @Override
@@ -61,15 +92,21 @@ public class ProductDAO implements CrudDAO<Product> {
         ArrayList<Product> products = new ArrayList<Product>();
 
         try {
-
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM mytable");
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products");
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next())
-            {
+            while (rs.next())  {
+                Product nextP = new Product();
+
+                nextP.setId(rs.getString("id"));
+                nextP.setName(rs.getString("name"));
+                nextP.setPrice(rs.getInt("price"));
+                nextP.setDescription(rs.getString("description"));
+
                 System.out.print("Column 1 returned ");
                 System.out.println(rs.getString(1));
 
+                products.add(nextP);
             }
             rs.close();
             ps.close();
@@ -81,36 +118,10 @@ public class ProductDAO implements CrudDAO<Product> {
         return products;
     }
 
-    public Account getUserByUsernameAndPassword(String un, String pw) {
-        Account user = new Account();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(path));
-
-            String userData; // id:username:password:role
-            while ((userData = br.readLine()) != null) {
-                String[] userArr = userData.split(":"); // [id, username, password, role]
-                String id = userArr[0];
-                String username = userArr[1];
-                String password = userArr[2];
-                //String role = userArr[3];
-
-                if (un.equals(username)) {
-                    user.setUsername(id);
-                    user.setUsername(username);
-                    //user.set(role);
-
-                    if (pw.equals(password)) user.setPassword(password);
-                    else break;
-                } else if (pw.equals(password)) user.setPassword(password);
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("An error occurred when trying to access the file.");
-        } catch (IOException e) {
-            throw new RuntimeException("An error occurred when trying to access the file information.");
-        }
-
-        return user;
+    @Override
+    public boolean getExistsInColumnByString(String column, String input) {
+        return false;
     }
+
 
 }

@@ -4,17 +4,19 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Account {
-    private UUID id;
+    private String id;
     private String username;
     private String password;
-    private ArrayList<Order> order;
-    private Order cart;
+    private String role;
+    private String address;
 
-    public UUID getId() {
+    //<editor-fold desc="Get/Set">
+
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -34,19 +36,23 @@ public class Account {
         this.password = password;
     }
 
-    public ArrayList<Order> getOrder() {
-        return order;
+    public String getRole() {
+        return role;
     }
 
-    public void setOrder(ArrayList<Order> order) {
-        this.order = order;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public Order getCart() {
-        return cart;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCart(Order cart) {
-        this.cart = cart;
+    public void setAddress(String address) {
+        this.address = address;
     }
+
+
+    //</editor-fold>
+
 }

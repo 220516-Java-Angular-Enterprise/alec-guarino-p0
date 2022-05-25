@@ -1,15 +1,40 @@
 package com.revature.webstore.models;
 
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
 
 public class Location {
 
-    private UUID id;
-    private ArrayList<Order> orders;
-    private Map<UUID, Integer> productStock;
+    private String id;
+    private String name;
+    private String address;
 
+    //<editor-fold desc="Get/Set">
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+    //</editor-fold>
 
 }
