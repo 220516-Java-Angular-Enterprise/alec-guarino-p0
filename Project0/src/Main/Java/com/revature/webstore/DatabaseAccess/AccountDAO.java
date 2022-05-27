@@ -20,7 +20,7 @@ public class AccountDAO implements CrudDAO<Account> {
     @Override
     public void save(Account obj) {
         try{
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("INSERT INTO products (id, username, password, role, address) VALUES(?,?,?,?,?)");
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("INSERT INTO accounts (id, username, password, role, address) VALUES(?,?,?,?,?)");
             ps.setString(1, obj.getId() );
             ps.setString(2, obj.getUsername() );
             ps.setString(3, obj.getPassword() );
@@ -109,6 +109,7 @@ public class AccountDAO implements CrudDAO<Account> {
 
     @Override
     public boolean getExistsInColumnByString(String column, String input) {
+
         try {
 
             PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT " + column + " FROM accounts WHERE " + column + " = " + input);
@@ -116,13 +117,16 @@ public class AccountDAO implements CrudDAO<Account> {
 
             while (rs.next())  {
                 String val = rs.getString(column);
-                System.out.println(val);
+                //System.out.println(val);
+                rs.close();
+                ps.close();
                 return true;
+                //System.out.print("Column 1 returned ");
+                //System.out.println(rs.getString(1));
             }
-            rs.close();
-            ps.close();
+
         } catch (SQLException e) {
-            System.out.print("FAIL!");
+            System.out.println("FAILed to see if exists!!");
             //throw new RuntimeException("An error occurred when trying to access the file.");
         }
 
@@ -133,17 +137,30 @@ public class AccountDAO implements CrudDAO<Account> {
         Account account = new Account();
         try {
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT " + column + " FROM accounts WHERE " + column + " = " + input);
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM accounts WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {
-                String val = rs.getString(column);
-                System.out.println(val);
+                //System.out.println(rs.getString( "id" ));
+                //System.out.println(rs.getString( "username" ));
+                //System.out.println(rs.getString( "password" ));
+
+                account.setId(rs.getString("id"));
+                account.setUsername(rs.getString("username"));
+                account.setPassword(rs.getString("password"));
+                account.setRole(rs.getString("role"));
+                account.setAddress(rs.getString("address"));
             }
             rs.close();
             ps.close();
         } catch (SQLException e) {
-            System.out.print("FAIL!");
+
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+
+
+            System.out.println("FAILe to get by ! " + column + " using value: " + input);
             //throw new RuntimeException("An error occurred when trying to access the file.");
         }
 
