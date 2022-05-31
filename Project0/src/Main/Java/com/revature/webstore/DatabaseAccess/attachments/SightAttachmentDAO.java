@@ -4,6 +4,7 @@ import com.revature.webstore.DatabaseAccess.CrudDAO;
 import com.revature.webstore.DatabaseAccess.DatabaseConnection;
 import com.revature.webstore.models.attachments.GeneralAttachment;
 import com.revature.webstore.models.attachments.SightAttachment;
+import com.revature.webstore.models.attachments.UnderBarrelAttachment;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -115,4 +116,55 @@ public class SightAttachmentDAO implements CrudDAO<SightAttachment> {
 
         return false;
     }
+
+    public SightAttachment getRowByColumnValue(String column, String input){
+        SightAttachment row = new SightAttachment();
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products_sightattachments WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                row.setId(rs.getString("id"));
+                row.setHasZoom(rs.getBoolean("hasZoom"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+
+
+            System.out.println("FAILe to get by ! " + column + " using value: " + input);
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return row;
+
+    }
+
+    public ArrayList<String> getAllIDAsString(){
+        ArrayList<String> idToReturn = new ArrayList<String>();
+
+        try {
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT id FROM products_sightattachments");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                idToReturn.add(rs.getString("id"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.print("");
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return idToReturn;
+    }
+
 }

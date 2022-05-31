@@ -2,6 +2,7 @@ package com.revature.webstore.DatabaseAccess;
 
 import com.revature.webstore.models.Product;
 import com.revature.webstore.models.Account;
+import com.revature.webstore.models.Replica;
 
 import java.io.*;
 import java.io.FileWriter;
@@ -144,5 +145,56 @@ public class ProductDAO implements CrudDAO<Product> {
         return false;
     }
 
+    public Product getRowByColumnValue(String column, String input){
+        Product row = new Product();
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                row.setId(rs.getString("id"));
+                row.setName(rs.getString("name"));
+                row.setPrice(rs.getInt("price"));
+                row.setDescription(rs.getString("description"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+
+
+            System.out.println("FAILe to get by ! " + column + " using value: " + input);
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return row;
+
+    }
+
+    public ArrayList<String> getAllIDAsString(){
+        ArrayList<String> idToReturn = new ArrayList<String>();
+
+        try {
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT id FROM products");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                idToReturn.add(rs.getString("id"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.print("");
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return idToReturn;
+    }
 
 }

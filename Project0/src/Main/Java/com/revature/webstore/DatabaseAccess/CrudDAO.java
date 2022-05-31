@@ -9,7 +9,8 @@ public interface CrudDAO<T> {
     void delete(String id);
     T getByID(String id);
     ArrayList<T> getAll();
+    ArrayList<String> getAllIDAsString();
 
     boolean getExistsInColumnByString(String column, String input);
-
+    T getRowByColumnValue(String column, String input);
 }

@@ -3,6 +3,7 @@ package com.revature.webstore.DatabaseAccess;
 import com.revature.webstore.models.Product;
 import com.revature.webstore.models.Replica;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -95,6 +96,27 @@ public class ReplicaDAO implements CrudDAO<Replica> {
         return products;
     }
 
+    public ArrayList<String> getAllIDAsString(){
+        ArrayList<String> idToReturn = new ArrayList<String>();
+
+        try {
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT id FROM products_replicas");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                idToReturn.add(rs.getString("id"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.print("");
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return idToReturn;
+    }
+
     @Override
     public boolean getExistsInColumnByString(String column, String input) {
 
@@ -120,4 +142,36 @@ public class ReplicaDAO implements CrudDAO<Replica> {
 
         return false;
     }
+
+    public Replica getRowByColumnValue(String column, String input){
+        Replica row = new Replica();
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM accounts WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                row.setId(rs.getString("id"));
+                row.setTakeUnderBarrelAttachment( rs.getBoolean("takeunderbarrelattachment"));
+                row.setTakeGeneralAttachment(     rs.getBoolean("takegeneralattachment"));
+                row.setTakeSightAttachment(       rs.getBoolean("takesightattachment"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+
+
+            System.out.println("FAILe to get by ! " + column + " using value: " + input);
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return row;
+
+    }
+
 }

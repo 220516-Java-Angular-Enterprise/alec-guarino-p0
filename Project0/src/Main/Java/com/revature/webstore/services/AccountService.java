@@ -22,7 +22,7 @@ public class AccountService {
     }
 
     public Account getAccountByColumnValue(String column, String value){
-        return accountDAO.getAccountByColumnValue(column, value);
+        return accountDAO.getRowByColumnValue(column, value);
     }
 
     public boolean getExists(String column, String input){

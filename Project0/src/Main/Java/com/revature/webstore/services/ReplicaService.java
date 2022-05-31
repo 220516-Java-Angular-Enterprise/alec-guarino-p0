@@ -5,6 +5,7 @@ import com.revature.webstore.DatabaseAccess.ReplicaDAO;
 import com.revature.webstore.models.Product;
 import com.revature.webstore.models.Replica;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReplicaService {
@@ -25,5 +26,9 @@ public class ReplicaService {
 
     public boolean getExists(String column, String input){
         return replicaDAO.getExistsInColumnByString(column, input);
+    }
+
+    public ArrayList<String> getAllIDAsString(){
+        return replicaDAO.getAllIDAsString();
     }
 }

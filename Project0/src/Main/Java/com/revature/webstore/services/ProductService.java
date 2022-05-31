@@ -25,4 +25,8 @@ public class ProductService {
         return productDAO.getExistsInColumnByString(column, input);
     }
 
+    public Product getRowByColumnValue(String column, String input){
+        return productDAO.getRowByColumnValue(column, input);
+    }
+
 }

@@ -1,9 +1,15 @@
 package com.revature.webstore.States;
 
+import com.revature.webstore.DatabaseAccess.ProductDAO;
+import com.revature.webstore.DatabaseAccess.ReplicaDAO;
 import com.revature.webstore.Main;
 import com.revature.webstore.models.Order;
+import com.revature.webstore.models.Product;
 import com.revature.webstore.services.InputReader;
+import com.revature.webstore.services.ProductService;
+import com.revature.webstore.services.ReplicaService;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class StoreState {
@@ -35,6 +41,8 @@ public class StoreState {
 
     private boolean running;
     private CurrentState state;
+
+    ArrayList<Product> productsBeingViewed = new ArrayList<Product>();
 
     public StoreState(){
         running = true;
@@ -73,6 +81,19 @@ public class StoreState {
     }
 
     private void viewReplicas(Scanner inputReader, String input) {
+        ArrayList<String> replicaIDs = new ReplicaService(new ReplicaDAO()).getAllIDAsString();
+        ProductService productService = new ProductService(new ProductDAO());
+
+        productsBeingViewed.clear();
+        for(String s : replicaIDs){
+            productsBeingViewed.add(    productService.getRowByColumnValue("id", "'" + s + "'")     );
+        }
+
+        for(Product p : productsBeingViewed){
+            System.out.println(p);
+        }
+
+        state = CurrentState.index;
 
     }
 

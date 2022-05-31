@@ -2,6 +2,7 @@ package com.revature.webstore.DatabaseAccess;
 
 import com.revature.webstore.models.Order;
 import com.revature.webstore.models.Product;
+import com.revature.webstore.models.Replica;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +17,7 @@ public class OrderDAO implements CrudDAO<Order>{
     @Override
     public void save(Order obj) {
         try{
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("INSERT INTO products (id, account, orderdate, locationid) VALUES(?,?,?,?)");
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("INSERT INTO orders (id, account, orderdate, locationid) VALUES(?,?,?,?)");
             ps.setString(1, obj.getId() );
             ps.setString(2, obj.getAccountID() );
             ps.setTimestamp(3, obj.getDate() );
@@ -43,7 +44,7 @@ public class OrderDAO implements CrudDAO<Order>{
         Order nextO = new Order();
         try {
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products WHERE id = " + id);
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM orders WHERE id = " + id);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {
@@ -74,7 +75,7 @@ public class OrderDAO implements CrudDAO<Order>{
 
         try {
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products");
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM orders");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {
@@ -104,4 +105,57 @@ public class OrderDAO implements CrudDAO<Order>{
     public boolean getExistsInColumnByString(String column, String input) {
         return false;
     }
+
+    public Order getRowByColumnValue(String column, String input){
+        Order row = new Order();
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM accounts WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                row.setId(rs.getString("id"));
+                row.setAccountID(rs.getString("account"));
+                row.setDate(rs.getTimestamp("orderdate"));
+                row.setLocationID(rs.getString("locationid"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+
+
+            System.out.println("FAILe to get by ! " + column + " using value: " + input);
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return row;
+
+    }
+
+    public ArrayList<String> getAllIDAsString(){
+        ArrayList<String> idToReturn = new ArrayList<String>();
+
+        try {
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT id FROM orders");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                idToReturn.add(rs.getString("id"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.print("");
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return idToReturn;
+    }
+
 }

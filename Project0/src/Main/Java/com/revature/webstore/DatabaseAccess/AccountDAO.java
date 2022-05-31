@@ -49,7 +49,7 @@ public class AccountDAO implements CrudDAO<Account> {
         Account nextA = new Account();
         try {
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products WHERE id = " + id);
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM accounts WHERE id = " + id);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {
@@ -82,7 +82,7 @@ public class AccountDAO implements CrudDAO<Account> {
 
         try {
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM products");
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM accounts");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {
@@ -136,7 +136,7 @@ public class AccountDAO implements CrudDAO<Account> {
         return false;
     }
 
-    public Account getAccountByColumnValue(String column, String input){
+    public Account getRowByColumnValue(String column, String input){
         Account account = new Account();
         try {
 
@@ -170,6 +170,27 @@ public class AccountDAO implements CrudDAO<Account> {
 
         return account;
 
+    }
+
+    public ArrayList<String> getAllIDAsString(){
+        ArrayList<String> idToReturn = new ArrayList<String>();
+
+        try {
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT id FROM accounts");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                idToReturn.add(rs.getString("id"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.print("");
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return idToReturn;
     }
 
 }
