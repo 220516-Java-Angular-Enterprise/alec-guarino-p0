@@ -3,6 +3,7 @@ package com.revature.webstore;
 import com.revature.webstore.DatabaseAccess.AccountDAO;
 import com.revature.webstore.DatabaseAccess.ProductDAO;
 import com.revature.webstore.States.AdminState;
+import com.revature.webstore.States.StoreState;
 import com.revature.webstore.models.Account;
 import com.revature.webstore.models.Product;
 import com.revature.webstore.services.AccountService;
@@ -86,6 +87,7 @@ public class Main {
                     break;
                 case shopping:
                     System.out.println("Store:\n");
+                    new StoreState().main(inputReader, input);
                     break;
                 case customer_settings:
                     break;
@@ -251,6 +253,7 @@ public class Main {
         accountToAdd.setPassword(password);
         accountToAdd.setRole("guest");
         accountToAdd.setAddress("NO ADDRESS");
+        accountToAdd.setCredits(0);
         //</editor-fold>
 
         AccountService accService = new AccountService(new AccountDAO());

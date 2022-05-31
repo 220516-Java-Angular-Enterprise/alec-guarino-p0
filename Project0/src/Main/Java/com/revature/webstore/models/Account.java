@@ -9,6 +9,7 @@ public class Account {
     private String password;
     private String role;
     private String address;
+    private int credits;
 
     //<editor-fold desc="Get/Set">
 
@@ -52,7 +53,13 @@ public class Account {
         this.address = address;
     }
 
+    public int getCredits() {
+        return credits;
+    }
 
-    //</editor-fold>
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+//</editor-fold>
 
 }

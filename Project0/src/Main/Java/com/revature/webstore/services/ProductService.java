@@ -21,4 +21,8 @@ public class ProductService {
         return productDAO.getAll();
     }
 
+    public boolean getExists(String column, String input){
+        return productDAO.getExistsInColumnByString(column, input);
+    }
+
 }

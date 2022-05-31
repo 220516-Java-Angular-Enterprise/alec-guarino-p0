@@ -9,12 +9,11 @@ import java.util.UUID;
 public class Product {
 
     public enum ProductType {
-        standalone,
-        Replica,
-        PicitinyScope,
-        PicitinyBottomRail,
-        PicitinyAccessory,
-        AKSideRail
+        none,
+        replica,
+        sight_attachment,
+        under_barrel_attachment,
+        general_attachment
 
     }
 

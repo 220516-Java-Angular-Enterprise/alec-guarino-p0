@@ -20,12 +20,13 @@ public class AccountDAO implements CrudDAO<Account> {
     @Override
     public void save(Account obj) {
         try{
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("INSERT INTO accounts (id, username, password, role, address) VALUES(?,?,?,?,?)");
-            ps.setString(1, obj.getId() );
-            ps.setString(2, obj.getUsername() );
-            ps.setString(3, obj.getPassword() );
-            ps.setString(4, obj.getRole() );
-            ps.setString(5, obj.getAddress() );
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("INSERT INTO accounts (id, username, password, role, address, credits) VALUES(?,?,?,?,?,?)");
+            ps.setString(   1, obj.getId()          );
+            ps.setString(   2, obj.getUsername()    );
+            ps.setString(   3, obj.getPassword()    );
+            ps.setString(   4, obj.getRole()        );
+            ps.setString(   5, obj.getAddress()     );
+            ps.setInt(      6, obj.getCredits()     );
 
             ps.executeUpdate();
         } catch (Exception e) {
@@ -58,6 +59,7 @@ public class AccountDAO implements CrudDAO<Account> {
                 nextA.setPassword(rs.getString("password"));
                 nextA.setRole(rs.getString("role"));
                 nextA.setAddress(rs.getString("address"));
+                nextA.setCredits(rs.getInt("credits"));
 
                 System.out.print("Column 1 returned ");
                 System.out.println(rs.getString(1));
@@ -91,6 +93,7 @@ public class AccountDAO implements CrudDAO<Account> {
                 nextA.setPassword(rs.getString("password"));
                 nextA.setRole(rs.getString("role"));
                 nextA.setAddress(rs.getString("address"));
+                nextA.setCredits(rs.getInt("credits"));
 
                 System.out.print("Column 1 returned ");
                 System.out.println(rs.getString(1));
@@ -150,6 +153,7 @@ public class AccountDAO implements CrudDAO<Account> {
                 account.setPassword(rs.getString("password"));
                 account.setRole(rs.getString("role"));
                 account.setAddress(rs.getString("address"));
+                account.setCredits(rs.getInt("credits"));
             }
             rs.close();
             ps.close();
